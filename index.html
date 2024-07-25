@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Roblox Redirect</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const url = new URL(window.location.href);
+            const searchParams = url.searchParams.toString();
+            const redirectUrl = `roblox://experiences/start${searchParams ? `?${searchParams}` : ''}`;
+            console.log(redirectUrl);
+            window.location.href = redirectUrl;
+        });
+    </script>
+</head>
+<body>
+    <p>Redirecting to Roblox...</p>
+</body>
+</html>
