@@ -2,18 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Roblox Redirect with Complex URL Validation</title>
+    <title>Roblox Redirect</title>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const url = new URL(window.location.href);
             const searchParams = url.searchParams;
             
-            const robloxUrlRegex = /experiences\/start\??)?))(?:(?:(?:(?:id=\d+)|(?:placeid=\d+)|(?:userID=\d+)|(?:launchtime=\d+)|(?:gameInstanceId=(?:\w|\-)+)|(?:linkCode=(?:\w|\-)+)|(?:accessCode=(?:\w|\-)+)|(?:launchData=(?:.+))|(?:joinAttemptId=(?:[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12})+)|(?:joinAttemptOrigin=(?:\w|\-)+)|(?:callId=(?:[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12})+)|(?:callId=(?:[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12})+)|(?:reservedServerAccessCode=(?:\w|\-)+))&?)+)\/?/;
+            const validParams = [
+                'id', 'placeid', 'userID', 'launchtime', 'gameInstanceId', 'linkCode', 
+                'accessCode', 'launchData', 'joinAttemptId', 'joinAttemptOrigin', 
+                'callId', 'reservedServerAccessCode'
+            ];
 
             let redirectParams = [];
             
             for (let [key, value] of searchParams) {
-                if (robloxUrlRegex.test(`${key}=${value}`)) {
+                if (validParams.includes(key.toLowerCase())) {
                     redirectParams.push(`${key}=${encodeURIComponent(value)}`);
                 }
             }
