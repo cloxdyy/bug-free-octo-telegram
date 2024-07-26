@@ -2,13 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Roblox Redirect</title>
+    <title>Roblox Redirect with Complex URL Validation</title>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const url = new URL(window.location.href);
-            const searchParams = url.searchParams.toString();
-            const redirectUrl = `roblox://experiences/start${searchParams ? `?${searchParams}` : ''}`;
-            console.log(redirectUrl);
+            const searchParams = url.searchParams;
+            
+            const robloxUrlRegex = /experiences\/start\??)?))(?:(?:(?:(?:id=\d+)|(?:placeid=\d+)|(?:userID=\d+)|(?:launchtime=\d+)|(?:gameInstanceId=(?:\w|\-)+)|(?:linkCode=(?:\w|\-)+)|(?:accessCode=(?:\w|\-)+)|(?:launchData=(?:.+))|(?:joinAttemptId=(?:[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12})+)|(?:joinAttemptOrigin=(?:\w|\-)+)|(?:callId=(?:[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12})+)|(?:callId=(?:[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12})+)|(?:reservedServerAccessCode=(?:\w|\-)+))&?)+)\/?/;
+
+            let redirectParams = [];
+            
+            for (let [key, value] of searchParams) {
+                if (robloxUrlRegex.test(`${key}=${value}`)) {
+                    redirectParams.push(`${key}=${encodeURIComponent(value)}`);
+                }
+            }
+
+            let redirectUrl = 'roblox://experiences/start';
+            if (redirectParams.length > 0) {
+                redirectUrl += '?' + redirectParams.join('&');
+            }
+
+            console.log('Redirect URL:', redirectUrl);
             window.location.href = redirectUrl;
         });
     </script>
